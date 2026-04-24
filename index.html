@@ -20,63 +20,33 @@
             margin: 0 auto;
         }
 
-        .tarjeta-dpi {
-    width: 90mm; 
-    height: 63mm;
-    background-image: url('imagen_27423a.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    position: relative;
-    background-color: white;
-    border: 1px solid #ddd;
-    overflow: hidden;
-}
+        .dpi-card {
+            width: 90mm; 
+            height: 63mm;
+            /* NOMBRE CORREGIDO AQUÍ ABAJO */
+            background-image: url('image_27423a.png'); 
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            position: relative;
+            background-color: white;
+            border: 1px solid #ddd;
+            overflow: hidden;
+        }
 
         .dato {
             position: absolute;
             font-weight: bold;
             color: #1a1a1a;
             text-transform: uppercase;
-            /* Eliminamos el fondo blanco para que se vea el diseño limpio */
         }
 
-        /* --- NUEVAS COORDENADAS AJUSTADAS AL DISEÑO FINAL --- */
+        /* Coordenadas precisas */
+        .codigo-txt { top: 30%; left: 14%; font-size: 8pt; color: #2c3e50; }
+        .nombre-txt { top: 34%; left: 39%; font-size: 9pt; width: 45%; }
+        .nacionalidad-txt { top: 51%; left: 39%; font-size: 8.5pt; }
+        .sexo-txt { top: 65%; left: 39%; font-size: 8.5pt; }
+        .fecha-txt { top: 83%; left: 39%; font-size: 8.5pt; }
 
-        /* Código Personal arriba del chip */
-        .codigo-txt {
-            top: 30%;
-            left: 14%;
-            font-size: 8pt;
-            color: #2c3e50;
-        }
-
-        /* Datos principales alineados a los campos blancos */
-        .nombre-txt { 
-            top: 34%; 
-            left: 39%; 
-            font-size: 9pt; 
-            width: 45%; /* Evita que el nombre se salga si es muy largo */
-        }
-        
-        .nacionalidad-txt { 
-            top: 51%; 
-            left: 39%; 
-            font-size: 8.5pt; 
-        }
-
-        .sexo-txt { 
-            top: 65%; 
-            left: 39%; 
-            font-size: 8.5pt; 
-        }
-
-        .fecha-txt { 
-            top: 83%; 
-            left: 39%; 
-            font-size: 8.5pt; 
-        }
-
-        /* Foto ajustada al recuadro del paisaje */
         .foto-estudiante {
             position: absolute;
             top: 44%;
@@ -91,7 +61,7 @@
             .no-print { display: none; }
             body { background: white; padding: 0; }
             #contenedor { gap: 4px; padding: 5mm; }
-            .dpi-card { -webkit-print-color-adjust: exact; page-break-inside: avoid; border: 0.1mm solid #eee; }
+            .dpi-card { -webkit-print-color-adjust: exact; border: 0.1mm solid #eee; }
         }
     </style>
 </head>
@@ -99,7 +69,7 @@
 
     <div class="no-print">
         <h2>COPB Centro Urbano - Registro</h2>
-        <input type="text" id="codigo" placeholder="Código Personal del Niño" style="width:90%; padding:8px; margin:5px;">
+        <input type="text" id="codigo" placeholder="Código Personal" style="width:90%; padding:8px; margin:5px;">
         <input type="text" id="nombre" placeholder="Nombre Completo" style="width:90%; padding:8px; margin:5px;">
         <select id="sexo" style="width:94%; padding:8px; margin:5px;">
             <option value="MASCULINO">MASCULINO</option>
@@ -112,7 +82,7 @@
             ✅ Agregar a la hoja
         </button>
         <button onclick="window.print()" style="width:94%; padding:10px; background:#2c3e50; color:white; border:none; border-radius:5px; font-weight:bold; margin-top:10px; cursor:pointer;">
-            🖨️ Imprimir Hoja (8 Carnets)
+            🖨️ Imprimir 8 Carnets
         </button>
     </div>
 
@@ -127,7 +97,7 @@
             const inputFoto = document.getElementById('foto');
 
             if(!nombre || !fecha || !codigo || inputFoto.files.length === 0) {
-                alert("Por favor rellena todos los campos, incluyendo el código personal."); return;
+                alert("Faltan datos."); return;
             }
 
             const nacionalidad = (sexo === "MASCULINO") ? "GUATEMALTECO" : "GUATEMALTECA";
@@ -146,7 +116,6 @@
                 `;
                 document.getElementById('contenedor').appendChild(card);
                 
-                // Limpiar campos y enfocar para el siguiente
                 document.getElementById('codigo').value = "";
                 document.getElementById('nombre').value = "";
                 document.getElementById('fecha').value = "";
