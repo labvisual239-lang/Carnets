@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Generador 8 DPIs - Formato Numérico</title>
+    <title>Generador 8 DPIs - COPB Centro Urbano</title>
     <style>
         body { font-family: 'Arial', sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
         
@@ -36,36 +36,54 @@
             position: absolute;
             font-weight: bold;
             color: #1a1a1a;
+            text-transform: uppercase;
+            /* Eliminamos el fondo blanco para que se vea el diseño limpio */
         }
 
-        /* Coordenadas calculadas según tus ajustes de 700x494px */
+        /* --- NUEVAS COORDENADAS AJUSTADAS AL DISEÑO FINAL --- */
+
+        /* Código Personal arriba del chip */
+        .codigo-txt {
+            top: 30%;
+            left: 14%;
+            font-size: 8pt;
+            color: #2c3e50;
+        }
+
+        /* Datos principales alineados a los campos blancos */
         .nombre-txt { 
-            top: 34.4%;  /* 170px */
-            left: 40%;   /* 280px */
-            font-size: 9.5pt; 
-            text-transform: uppercase;
+            top: 34%; 
+            left: 39%; 
+            font-size: 9pt; 
+            width: 45%; /* Evita que el nombre se salga si es muy largo */
+        }
+        
+        .nacionalidad-txt { 
+            top: 51%; 
+            left: 39%; 
+            font-size: 8.5pt; 
         }
 
         .sexo-txt { 
-            top: 64.7%;  /* 320px */
-            left: 40%;   /* 280px */
-            font-size: 8.5pt;
-            text-transform: uppercase;
+            top: 65%; 
+            left: 39%; 
+            font-size: 8.5pt; 
         }
 
         .fecha-txt { 
-            top: 83%;    /* 410px */
-            left: 35.7%; /* 250px */
-            font-size: 9pt;
+            top: 83%; 
+            left: 39%; 
+            font-size: 8.5pt; 
         }
 
+        /* Foto ajustada al recuadro del paisaje */
         .foto-estudiante {
             position: absolute;
-            top: 43.9%;  /* 217px */
-            right: 8.5%; /* 60px */
-            width: 21.4%; /* 150px proporcional */
-            height: 40.5%; /* 200px proporcional */
-            border-radius: 8px; /* Ajustado al tamaño pequeño */
+            top: 44%;
+            right: 8%;
+            width: 22%; 
+            height: 40%;
+            border-radius: 5px; 
             object-fit: cover;
         }
 
@@ -80,19 +98,21 @@
 <body>
 
     <div class="no-print">
-        <h2>Panel de Registro - Visual Lab</h2>
+        <h2>COPB Centro Urbano - Registro</h2>
+        <input type="text" id="codigo" placeholder="Código Personal del Niño" style="width:90%; padding:8px; margin:5px;">
         <input type="text" id="nombre" placeholder="Nombre Completo" style="width:90%; padding:8px; margin:5px;">
         <select id="sexo" style="width:94%; padding:8px; margin:5px;">
             <option value="MASCULINO">MASCULINO</option>
             <option value="FEMENINO">FEMENINO</option>
         </select>
-        <input type="date" id="fecha" style="width:90%; padding:8px; margin:5px;">
+        <input type="text" id="fecha" placeholder="Fecha (DD/MM/AAAA)" style="width:90%; padding:8px; margin:5px;">
         <input type="file" id="foto" accept="image/*" style="width:90%; padding:8px; margin:5px;">
+        
         <button onclick="agregarEstudiante()" style="width:94%; padding:10px; background:#27ae60; color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">
-            ✅ Agregar Estudiante
+            ✅ Agregar a la hoja
         </button>
         <button onclick="window.print()" style="width:94%; padding:10px; background:#2c3e50; color:white; border:none; border-radius:5px; font-weight:bold; margin-top:10px; cursor:pointer;">
-            🖨️ Imprimir Hoja (8 DPIs)
+            🖨️ Imprimir Hoja (8 Carnets)
         </button>
     </div>
 
@@ -100,35 +120,38 @@
 
     <script>
         function agregarEstudiante() {
+            const codigo = document.getElementById('codigo').value;
             const nombre = document.getElementById('nombre').value;
             const sexo = document.getElementById('sexo').value;
-            const fechaRaw = document.getElementById('fecha').value;
+            const fecha = document.getElementById('fecha').value;
             const inputFoto = document.getElementById('foto');
 
-            if(!nombre || !fechaRaw || inputFoto.files.length === 0) {
-                alert("Faltan datos o la foto."); return;
+            if(!nombre || !fecha || !codigo || inputFoto.files.length === 0) {
+                alert("Por favor rellena todos los campos, incluyendo el código personal."); return;
             }
 
-            // Convertir fecha de AAAA-MM-DD a DD/MM/AAAA
-            const partes = fechaRaw.split("-");
-            const fechaNumerica = `${partes[2]}/${partes[1]}/${partes[0]}`;
+            const nacionalidad = (sexo === "MASCULINO") ? "GUATEMALTECO" : "GUATEMALTECA";
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const card = document.createElement('div');
                 card.className = 'dpi-card';
                 card.innerHTML = `
+                    <div class="dato codigo-txt">COD: ${codigo}</div>
                     <div class="dato nombre-txt">${nombre}</div>
+                    <div class="dato nacionalidad-txt">${nacionalidad}</div>
                     <div class="dato sexo-txt">${sexo}</div>
-                    <div class="dato fecha-txt">${fechaNumerica}</div>
+                    <div class="dato fecha-txt">${fecha}</div>
                     <img src="${e.target.result}" class="foto-estudiante">
                 `;
                 document.getElementById('contenedor').appendChild(card);
                 
-                // Limpiar campos
+                // Limpiar campos y enfocar para el siguiente
+                document.getElementById('codigo').value = "";
                 document.getElementById('nombre').value = "";
                 document.getElementById('fecha').value = "";
                 inputFoto.value = "";
+                document.getElementById('codigo').focus();
             }
             reader.readAsDataURL(inputFoto.files[0]);
         }
